@@ -31,15 +31,15 @@ interface PhotoRepository : DatastoreRepository<Photo, String>
 
 @Entity
 data class Photo(
-        @Id
-        val id: String? = null,
-        val uri: String? = null,
-        val label: String?
+    @Id
+    val id: String? = null,
+    val uri: String? = null,
+    val label: String?
 )
 
 @RestController
 class HelloController(
-        private val photoRepository: PhotoRepository
+    private val photoRepository: PhotoRepository
 ) {
 
     @PostMapping("/photo")
@@ -50,9 +50,9 @@ class HelloController(
 
 @RestController
 class UploadController(
-        private val ctx: ApplicationContext,
-        private val photoRepository: PhotoRepository,
-        private val visionTemplate: CloudVisionTemplate
+    private val ctx: ApplicationContext,
+    private val photoRepository: PhotoRepository,
+    private val visionTemplate: CloudVisionTemplate
 
 ) {
     val bucket = "gs://emerald-agility-301910-photo/images"
@@ -67,9 +67,9 @@ class UploadController(
                 input.copyTo(output)
             }
         }
-      val resp=  visionTemplate.analyzeImage(file.resource, Feature.Type.LABEL_DETECTION)
+        val resp = visionTemplate.analyzeImage(file.resource, Feature.Type.LABEL_DETECTION)
         println(resp)
-        val labels=resp.labelAnnotationsList.take(5).map { it.description }.joinToString(",")
+        val labels = resp.labelAnnotationsList.take(5).map { it.description }.joinToString(",")
         return photoRepository.save(Photo(id, "/$id", labels))
     }
 
